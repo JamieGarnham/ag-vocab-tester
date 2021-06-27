@@ -7,11 +7,18 @@ dict_1V = {'ἄγω': [['lead', 'drive', 'bring']], 'ἄρχω': [['begin'], ['r
 
 vocab_dict = dict_1V
 greek_list = list(vocab_dict.keys())
-
-ready = input("Press any key to start." )
+ready = input("Press any key to start. ")
+max_count = 'xxx'
+while type(max_count) != int or max_count < 1 or max_count > 1000:
+    try:
+        max_count = int(input("How many words? "))
+        if max_count < 1:
+            print('Please enter a number between 1 and 1000')
+    except ValueError:
+        print('Please enter a valid positive integer.')
 
 if ready:    
-    while True:       
+    for count in range(max_count):       
         n = random.randint(0, len(greek_list) - 1)
         cur_greek = greek_list[n]
         cur_engs = vocab_dict[cur_greek]
@@ -26,17 +33,19 @@ if ready:
         print("   ~")
         print(f"'{cur_greek}':")
     
-        i = 0
+        score = 0
         rerun = False     
-        while i in range(distinct_engs):
-
+        while score in range(distinct_engs):
+            target = 'Middle/alternate meaning: '
             if rerun:
-                input_eng = input('Try another: ')
+                target = 'Try another: '
                 rerun = False
-            elif i == 0:
-                input_eng = input('English meaning: ')
-            else:
-                input_eng = input('Middle/alternate meaning: ')
+            elif score == 0:
+                target = 'English meaning: '
+                    
+            input_eng = input(target)
+            if input_eng == 'exit':
+                print("Exiting...")
             
             correct = False
             for eng_set in cur_engs:
@@ -44,7 +53,7 @@ if ready:
                     filled_sets.append(eng_set)
                     cur_engs.remove(eng_set)
                     correct = True
-                    i += 1
+                    score += 1
                     print('Correct!')
                     break
                 
@@ -57,4 +66,4 @@ if ready:
                 if not rerun:
                     print('Incorrect!')
                     print(f"Correct answers are: {correct_strs}")
-                    break                    
+                    break
